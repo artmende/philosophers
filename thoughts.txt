@@ -1,0 +1,13 @@
+
+each philo is a thread.
+
+they all wait at first that all of them are created.
+
+then one of them will store the starting time and they will all start the simulation
+
+first the philo try to eat. when its time for them to eat they actually dont do anything else than trying
+
+they have their own fork and can access the fork if their neighbor
+
+if their own fork is free and one of the neighbor fork is free too, philo lock both fork and eat
+
