@@ -6,35 +6,24 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 15:08:35 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/13 17:34:49 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/16 18:51:12 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	*my_tread_fct(void *arg)
-{
-	static int	i = 0;
-
-	int	id = 
-
-	i++;
-	*((int *)arg) = *((int *)arg) + 1;
-	printf("Thread %d incremented i and its value is now %d\n", *((int *)arg), i);
-
-	if (*((int *)arg) == 2)
-	{
-		printf("Thread %d is grounded. He has to wait 5 seconds !\n", *((int *)arg));
-		sleep(5);
-	}
-	return (NULL);
-}
 
 void	*philo_s_way_of_life(void *arg)
 {
 	t_philo	philo;
 
 	philo = (*(t_philo *)arg);
+	while (*(philo.start) == 0)
+	{}
+	// grabbing the forks
+	// usleep for the time needed to eat
+	// releasing the forks
+	// usleep for the time needed to sleep
+	// back to grabbing the fork, but before "started thinking"
 	int	i = 0;
 	while (i < 10)
 	{
@@ -53,19 +42,23 @@ void	*philo_s_way_of_life(void *arg)
 	return (NULL);
 }
 
-t_philo	*init_philo_struct(int	nbr) // receive the number of philo
+t_philo	*init_philo_struct(int	nbr, int *start) // receive the number of philo
 {
 	int				i;
 	t_philo			*ret;
 	pthread_mutex_t	*fork;
 
 	ret = malloc(sizeof(t_philo) * nbr);
-	if (!ret)
-		return (NULL);
+//	if (!ret)
+//		return (NULL);
 	fork = malloc(sizeof(pthread_mutex_t) * nbr);
+	if (!ret || !fork)
+		return (NULL);
+	*start = 0;
 	i = 0;
 	while (i < nbr)
-	{
+	{ // need to give them ptr to ms_at_start
+		ret[i].start = start;
 		ret[i].philo = i;
 		ret[i].fork = fork;
 		pthread_mutex_init(&(ret[i].fork)[i], NULL);
@@ -92,23 +85,26 @@ int	main(int argc, char **argv)
 {
 	pthread_t		*philo_thread;
 	t_philo			*philo_struct;
-	int	nbr_of_philo;
+	int				nbr_of_philo;
+	int				start;
 
-	if (argc < 2 || argc > 5) // not 5
+	if (argc < 2 || argc > 5)
 		return (1);
 
-	nbr_of_philo = atoi(argv[1]);
+	nbr_of_philo = ft_atoi(argv[1]);
 
-	philo_struct = init_philo_struct(nbr_of_philo);
+	philo_struct = init_philo_struct(nbr_of_philo, &start);
+	if (!philo_struct)
+		return (1); // in case malloc fail
 
 	philo_thread = malloc(sizeof(pthread_t) * nbr_of_philo);
+	if (!philo_thread)
+		return (1);
 
 	int	i = 0;
-	while (i < nbr_of_philo)
-	{
-		pthread_create(&philo_thread[i], NULL, philo_s_way_of_life, &philo_struct[i]);
-		i++;
-	}
+
+	create_threads(nbr_of_philo, philo_thread, philo_struct);
+
 	i = 0;
 	while (i < nbr_of_philo)
 	{
