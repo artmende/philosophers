@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 19:08:32 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/16 19:12:45 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/17 14:15:34 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,15 @@ long	set_ms_start(void)
 
 	gettimeofday(&tp, NULL);
 	return ((long)(tp.tv_usec / 1000) + tp.tv_sec * 1000);
+}
+
+void	ft_sleep_ms(long ms)
+{
+	long	start_time;
+
+	start_time = set_ms_start();
+	while (get_timestamp(start_time) < ms)
+	{
+		usleep(ms * 2);
+	}
 }

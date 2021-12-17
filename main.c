@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 15:08:35 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/16 20:00:46 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/17 17:55:45 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ void	*philo_s_way_of_life(void *arg)
 	// usleep for the time needed to sleep
 	// back to grabbing the fork, but before "started thinking"
 	int	i = 0;
-	while (i < 10)
+	while (philo.misc->nbr_of_cycles == -1 || i < philo.misc->nbr_of_cycles)
 	{
 		printf("%ld - philo %d has started eating.\n", get_timestamp(philo.misc->ms_at_start), philo.philo);
-		usleep(SLEEPING_TIME);
+		ft_sleep_ms(philo.misc->time_to_eat);
 		printf("%ld - philo %d has started sleeping.\n", get_timestamp(philo.misc->ms_at_start), philo.philo);
-		usleep(SLEEPING_TIME);
+		ft_sleep_ms(philo.misc->time_to_sleep);
 		printf("%ld - philo %d has started thinking.\n", get_timestamp(philo.misc->ms_at_start), philo.philo);
 		i++;
 	}
@@ -49,8 +49,6 @@ t_philo	*init_philo_struct(t_misc *misc) // receive the number of philo
 	pthread_mutex_t	*fork;
 
 	ret = malloc(sizeof(t_philo) * misc->nbr_of_philo);
-//	if (!ret)
-//		return (NULL);
 	fork = malloc(sizeof(pthread_mutex_t) * misc->nbr_of_philo);
 	if (!ret || !fork)
 		return (NULL);
@@ -81,16 +79,34 @@ void	terminate_philo(t_philo *philo_struct, int nbr)
 	free(philo_struct);
 }
 
+void	check_leaks(int sig)
+{
+	(void)sig;
+	system("echo coucou");
+//	system("leaks a.out");
+	
+	exit(1);
+}
+
+void	set_debug_signals(void)
+{
+	signal(SIGQUIT, check_leaks);
+	signal(SIGINT, check_leaks);
+}
+
+
 int	main(int argc, char **argv)
 {
+
+	set_debug_signals();
+
 	pthread_t		*philo_thread;
 	t_philo			*philo_struct;
 	t_misc			misc;
 
-	if (argc < 2 || argc > 5)
-		return (1);
+	if (acquire_args(&misc, argc, argv) == 0)
+		return (display_usage());
 
-	misc.nbr_of_philo = ft_atoi(argv[1]);
 
 	philo_struct = init_philo_struct(&misc);
 	if (!philo_struct)
