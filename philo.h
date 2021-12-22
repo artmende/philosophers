@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 15:08:47 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/17 16:15:15 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/22 19:38:15 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 
 #define SLEEPING_TIME 5
 
+int	fd_debug;
+
 typedef struct s_misc
 {
 	int		nbr_of_philo;
@@ -31,11 +33,13 @@ typedef struct s_misc
 	int		nbr_of_cycles;
 	int		start;
 	long	ms_at_start;
+	long	*last_eat_ms;
 }	t_misc;
 
 typedef struct s_philo
 {
 	int				philo; // philo number
+	int				finished;
 	pthread_mutex_t	*fork; // fork array
 	t_misc			*misc;
 }	t_philo;
@@ -45,6 +49,9 @@ typedef struct s_philo
 
 
 void	*philo_s_way_of_life(void *arg);
+void	*life_thread(void *arg);
+void	set_forks(int *fork_a, int *fork_b, t_philo *philo);
+void	philo_eat(t_philo *philo);
 
 
 /*	time_fct.c	*/
