@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:20:34 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/22 19:43:44 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/23 15:28:48 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	create_threads(int nbr_of_philo, pthread_t *philo_thread, t_philo *philo_st
 		pthread_create(&philo_thread[i], NULL, philo_s_way_of_life, &philo_struct[i]);
 		i++;
 	}
-	pthread_create(&philo_thread[i], NULL, life_thread, philo_struct); // life thread
 	usleep(100);
 	philo_struct[0].misc->ms_at_start = set_ms_start();
 	philo_struct[0].misc->start = 1;

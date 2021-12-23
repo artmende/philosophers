@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 15:08:35 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/23 15:22:02 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/23 17:03:03 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 
 
-t_philo	*init_philo_struct(t_misc *misc) // receive the number of philo
+t_philo	*init_philo_struct(t_misc *misc)
 {
 	int				i;
 	t_philo			*ret;
@@ -28,6 +28,7 @@ t_philo	*init_philo_struct(t_misc *misc) // receive the number of philo
 		return (NULL);
 	memset(misc->last_eat_ms, 0, sizeof(long) * misc->nbr_of_philo);
 	misc->start = 0;
+	pthread_mutex_init(&misc->speak, NULL);
 	i = 0;
 	while (i < misc->nbr_of_philo)
 	{
@@ -66,28 +67,16 @@ int	main(int argc, char **argv)
 	t_misc			misc;
 
 	if (acquire_args(&misc, argc, argv) == 0)
-		return (display_usage());
+		return (display_usage(argv));
 	philo_struct = init_philo_struct(&misc);
 	if (!philo_struct)
 		return (1); // in case malloc fail
 
-	philo_thread = malloc(sizeof(pthread_t) * (misc.nbr_of_philo + 1));
+	philo_thread = malloc(sizeof(pthread_t) * misc.nbr_of_philo);
 	if (!philo_thread)
 		return (1);
 	create_threads(misc.nbr_of_philo, philo_thread, philo_struct);
-
-/* 	int i = 0;
-	while (i < misc.nbr_of_philo)
-	{
-		pthread_join(philo_thread[i], NULL);
-		i++;
-	} */
-
-	pthread_join(philo_thread[misc.nbr_of_philo], NULL);
-
-//	join_threads(misc.nbr_of_philo, );
-
-//	terminate_philo(philo_struct, misc.nbr_of_philo);
+	life_check(philo_struct);
 
 
 //	system("leaks a.out");

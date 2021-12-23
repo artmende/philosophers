@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 15:08:47 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/22 19:38:15 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/23 17:01:57 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,17 @@
 
 #define SLEEPING_TIME 5
 
-int	fd_debug;
-
 typedef struct s_misc
 {
-	int		nbr_of_philo;
-	long	time_to_die;
-	long	time_to_eat;
-	long	time_to_sleep;
-	int		nbr_of_cycles;
-	int		start;
-	long	ms_at_start;
-	long	*last_eat_ms;
+	int				nbr_of_philo;
+	long			time_to_die;
+	long			time_to_eat;
+	long			time_to_sleep;
+	int				nbr_of_cycles;
+	int				start;
+	long			ms_at_start;
+	long			*last_eat_ms;
+	pthread_mutex_t	speak;
 }	t_misc;
 
 typedef struct s_philo
@@ -49,7 +48,9 @@ typedef struct s_philo
 
 
 void	*philo_s_way_of_life(void *arg);
-void	*life_thread(void *arg);
+
+void	*life_check(t_philo *philo_array);
+
 void	set_forks(int *fork_a, int *fork_b, t_philo *philo);
 void	philo_eat(t_philo *philo);
 
@@ -66,7 +67,7 @@ void	create_threads(int nbr_of_philo, pthread_t *philo_thread, t_philo *philo_st
 
 int	acquire_args(t_misc *misc, int argc, char **argv);
 int	check_args_only_nbr(int argc, char **argv);
-int	display_usage(void);
+int	display_usage(char **argv);
 
 
 void	ft_sleep_ms(long ms);
