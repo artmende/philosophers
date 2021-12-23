@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 16:13:34 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/22 19:43:23 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/23 14:05:24 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,19 @@
 
 int	threads_not_finished(t_philo *philo_array)
 {
-	// philo put their last_eat_ms at -1 when they finish their cycles
 	int	i;
 
 	i = 0;
 	while (i < philo_array[0].misc->nbr_of_philo)
 	{
 		if (philo_array[i].finished == 0)
+		{
+/* 			if (get_timestamp(philo_array->misc->ms_at_start) > 1002)
+			{
+				printf("return 1 because of %d\n", i);
+			} */
 			return (1);
+		}
 		i++;
 	}
 	return (0);
@@ -53,6 +58,7 @@ void	*life_thread(void *arg)
 			i++;
 		}
 	}
+//	printf("coucou %ld", get_timestamp(philo_array->misc->ms_at_start));
 	return (0);
 }
 
@@ -66,12 +72,17 @@ void	*philo_s_way_of_life(void *arg)
 	i = 0;
 	while (philo->misc->start == 0)
 	{}
-//	while (philo->misc->nbr_of_cycles < 0 || i < philo->misc->nbr_of_cycles)
+	if (philo->philo % 2 /* && printf("philo %d is waiting\n", philo->philo) */)
+		ft_sleep_ms(5);
 	while (1)
 	{
+		ft_sleep_ms(1);
 		if (philo->misc->start == 0)
 			break ;
 		philo_eat(philo);
+		i++;
+		if (i == philo->misc->nbr_of_cycles)
+			philo->finished = 1;
 		if (philo->misc->start == 0)
 			break ;
 		timestamp = get_timestamp(philo->misc->ms_at_start);
@@ -81,9 +92,9 @@ void	*philo_s_way_of_life(void *arg)
 			break ;
 		timestamp = get_timestamp(philo->misc->ms_at_start);
 		printf("%ld %d is thinking\n", timestamp, philo->philo);
-		i++;
-		if (i == philo->misc->nbr_of_cycles)
-			philo->finished = 1; // to indicate that it has finished
+//		i++;
+//		if (i == philo->misc->nbr_of_cycles)
+//			(philo->finished = 1) && printf("%d has finished\n", philo->philo); // to indicate that it has finished
 
 /* 		printf("cycle %d\n", i);
 		if (philo->misc->start == 0)
@@ -112,8 +123,11 @@ void	set_forks(int *fork_a, int *fork_b, t_philo *philo)
 {
 	if (philo->philo == philo->misc->nbr_of_philo - 1)
 	{
-		*fork_a = 0;
-		*fork_b = philo->philo;
+//		*fork_a = 0;
+//		*fork_b = philo->philo;
+		*fork_a = philo->philo;
+		*fork_b = 0;
+
 	}
 	else
 	{

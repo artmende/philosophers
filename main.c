@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 15:08:35 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/22 19:38:35 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/23 15:22:02 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,37 +55,18 @@ void	terminate_philo(t_philo *philo_struct, int nbr)
 	free(philo_struct);
 }
 
-void	check_leaks(int sig)
-{
-	(void)sig;
-	system("echo coucou");
-//	system("leaks a.out");
-	
-	exit(1);
-}
 
-void	set_debug_signals(void)
-{
-	signal(SIGQUIT, check_leaks);
-	signal(SIGINT, check_leaks);
-}
+
 
 
 int	main(int argc, char **argv)
 {
-
-	fd_debug = open("debug_log.txt", O_WRONLY | O_CREAT | O_TRUNC, 00644);
-
-//	set_debug_signals();
-
 	pthread_t		*philo_thread;
 	t_philo			*philo_struct;
 	t_misc			misc;
 
 	if (acquire_args(&misc, argc, argv) == 0)
 		return (display_usage());
-
-
 	philo_struct = init_philo_struct(&misc);
 	if (!philo_struct)
 		return (1); // in case malloc fail
@@ -93,7 +74,6 @@ int	main(int argc, char **argv)
 	philo_thread = malloc(sizeof(pthread_t) * (misc.nbr_of_philo + 1));
 	if (!philo_thread)
 		return (1);
-
 	create_threads(misc.nbr_of_philo, philo_thread, philo_struct);
 
 /* 	int i = 0;
@@ -110,7 +90,7 @@ int	main(int argc, char **argv)
 //	terminate_philo(philo_struct, misc.nbr_of_philo);
 
 
-	system("leaks a.out");
+//	system("leaks a.out");
 
 	return (0);
 }
