@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 16:13:34 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/23 17:26:27 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/25 16:25:26 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void	*life_check(t_philo *philo_array)
 			i++;
 		}
 	}
+	philo_array->misc->start = 0;
+	ft_sleep_ms(500);
 //	printf("All philos succesfully completed their %d meals !\n", philo_array->misc->nbr_of_cycles);
 	return (0);
 }
