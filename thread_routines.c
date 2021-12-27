@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 16:13:34 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/25 16:25:26 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/27 16:46:08 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	*life_check(t_philo *philo_array)
 	return (0);
 }
 
-void	*philo_s_way_of_life(void *arg)
+void	*philo_routine(void *arg)
 {
 	t_philo	*philo; // use pointer instead
 	int		i;
@@ -65,7 +65,7 @@ void	*philo_s_way_of_life(void *arg)
 	while (philo->misc->start == 0)
 		usleep(50);
 	if (philo->philo % 2)
-		ft_sleep_ms(5);
+		ft_sleep_ms(philo->misc->time_to_eat * 2 / 3);
 	while (1)
 	{
 		if (philo->misc->start == 0)

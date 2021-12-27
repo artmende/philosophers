@@ -11,3 +11,12 @@ they have their own fork and can access the fork if their neighbor
 
 if their own fork is free and one of the neighbor fork is free too, philo lock both fork and eat
 
+
+malloced stuff : 
+
+threads
+forks
+last eat array
+philo struct
+need to destroy mutex first% 
+

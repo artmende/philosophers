@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 15:08:47 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/23 17:01:57 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/27 16:20:39 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_philo
 
 
 
-void	*philo_s_way_of_life(void *arg);
+void	*philo_routine(void *arg);
 
 void	*life_check(t_philo *philo_array);
 
