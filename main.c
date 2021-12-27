@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 15:08:35 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/23 17:03:03 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/27 18:45:15 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ int	main(int argc, char **argv)
 	create_threads(misc.nbr_of_philo, philo_thread, philo_struct);
 	life_check(philo_struct);
 
+	usleep(5000); // leave the time to the threads to finish.
+	// let's replace that with pthread_join, and free all 
+	// need to have special fct for the case where a philo is alone
 
 //	system("leaks a.out");
 

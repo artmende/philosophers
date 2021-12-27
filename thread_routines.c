@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 16:13:34 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/27 18:07:04 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/27 18:32:54 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	*life_check(t_philo *philo_array)
 				philo_array->misc->start = 0; // it is now forbidden to speak
 				pthread_mutex_lock(&philo_array->misc->speak);
 				printf("%ld %d died\n", current_time, i);
-				ft_sleep_ms(500);
+				printf("start : %d\n", philo_array->misc->start);
+				ft_sleep_ms(1000);
 				pthread_mutex_unlock(&philo_array->misc->speak);
 				return (0);
 			}
@@ -66,22 +67,20 @@ void	philo_loop_in_action(t_philo *philo, int times_eaten, long timestamp)
 		times_eaten++;
 		if (times_eaten == philo->misc->nbr_of_cycles)
 			philo->finished = 1;
-		if (philo->misc->start == 0)
-			break ;
+//		if (philo->misc->start == 0)
+//			break ;
 		timestamp = get_timestamp(philo->misc->ms_at_start);
 		pthread_mutex_lock(&philo->misc->speak);
-		if (philo->misc->start == 0)
-			printf("got it 3\n"); ////////////////
-		printf("%ld %d is sleeping\n", timestamp, philo->philo);
+		if (philo->misc->start)
+			printf("%ld %d is sleeping %d\n", timestamp, philo->philo, philo->misc->start);
 		pthread_mutex_unlock(&philo->misc->speak);
 		ft_sleep_ms(philo->misc->time_to_sleep);
-		if (philo->misc->start == 0)
-			break ;
+//		if (philo->misc->start == 0)
+//			break ;
 		timestamp = get_timestamp(philo->misc->ms_at_start);
 		pthread_mutex_lock(&philo->misc->speak);
-		if (philo->misc->start == 0)
-			printf("got it 4\n"); ////////////////
-		printf("%ld %d is thinking\n", timestamp, philo->philo);
+		if (philo->misc->start)
+			printf("%ld %d is thinking %d\n", timestamp, philo->philo, philo->misc->start);
 		pthread_mutex_unlock(&philo->misc->speak);
 	}
 }
@@ -89,40 +88,13 @@ void	philo_loop_in_action(t_philo *philo, int times_eaten, long timestamp)
 void	*philo_routine(void *arg)
 {
 	t_philo	*philo; // use pointer instead
-	int		i;
-	long	timestamp;
 
 	philo = (t_philo *)arg; // can initialize i at this line
-	i = 0;
 	while (philo->misc->start == 0)
 		usleep(50);
 	if (philo->philo % 2)
 		ft_sleep_ms(philo->misc->time_to_eat * 2 / 3);
-
 	philo_loop_in_action(philo, 0, 0);
-
-/* 	while (1)
-	{
-		if (philo->misc->start == 0)
-			break ;
-		philo_eat(philo);
-		i++;
-		if (i == philo->misc->nbr_of_cycles)
-			philo->finished = 1;
-		if (philo->misc->start == 0)
-			break ;
-		timestamp = get_timestamp(philo->misc->ms_at_start);
-		pthread_mutex_lock(&philo->misc->speak);
-		printf("%ld %d is sleeping\n", timestamp, philo->philo);
-		pthread_mutex_unlock(&philo->misc->speak);
-		ft_sleep_ms(philo->misc->time_to_sleep);
-		if (philo->misc->start == 0)
-			break ;
-		timestamp = get_timestamp(philo->misc->ms_at_start);
-		pthread_mutex_lock(&philo->misc->speak);
-		printf("%ld %d is thinking\n", timestamp, philo->philo);
-		pthread_mutex_unlock(&philo->misc->speak);
-	} */
 	return (NULL);
 }
 
@@ -156,24 +128,24 @@ void	philo_eat(t_philo *philo)
 
 	set_forks(&fork_a, &fork_b, philo);
 	pthread_mutex_lock(&philo->fork[fork_a]);
-	if (philo->misc->start == 0)
-		return (unlock_mutex(&philo->fork[fork_a], NULL));
+//	if (philo->misc->start == 0)
+//		return (unlock_mutex(&philo->fork[fork_a], NULL));
 	timestamp = get_timestamp(philo->misc->ms_at_start);
 	pthread_mutex_lock(&philo->misc->speak);
-	if (philo->misc->start == 0)
-		printf("got it 1\n"); ////////////////
-	printf("%ld %d has taken a fork\n", timestamp, philo->philo);
+	if (philo->misc->start)
+		printf("%ld %d has taken a fork %d\n", timestamp, philo->philo, philo->misc->start);
 	pthread_mutex_unlock(&philo->misc->speak);
 	pthread_mutex_lock(&philo->fork[fork_b]);
-	if (philo->misc->start == 0)
-		return (unlock_mutex(&philo->fork[fork_a], &philo->fork[fork_b]));
+//	if (philo->misc->start == 0)
+//		return (unlock_mutex(&philo->fork[fork_a], &philo->fork[fork_b]));
 	timestamp = get_timestamp(philo->misc->ms_at_start);
 	philo->misc->last_eat_ms[philo->philo] = timestamp;
 	pthread_mutex_lock(&philo->misc->speak);
-	if (philo->misc->start == 0)
-		printf("got it 2\n"); ////////////////
-	printf("%ld %d has taken a fork\n", timestamp, philo->philo);
-	printf("%ld %d is eating\n", timestamp, philo->philo);
+	if (philo->misc->start)
+	{
+		printf("%ld %d has taken a fork %d\n", timestamp, philo->philo, philo->misc->start);
+		printf("%ld %d is eating %d\n", timestamp, philo->philo, philo->misc->start);
+	}
 	pthread_mutex_unlock(&philo->misc->speak);
 	ft_sleep_ms(philo->misc->time_to_eat);
 	unlock_mutex(&philo->fork[fork_a], &philo->fork[fork_b]);
