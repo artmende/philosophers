@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:59:32 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/23 16:25:31 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/28 15:42:18 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	acquire_args(t_misc *misc, int argc, char **argv)
 		return (0);
 	misc->nbr_of_philo = ft_atoi(argv[1]);
 	if ((misc->nbr_of_philo == 0 && printf("\nThere are no philosophers.\n"))
-		|| (misc->nbr_of_philo > 200 && printf("\nMax 200 philos.\n")))
+		|| ((misc->nbr_of_philo > 200 || misc->nbr_of_philo < 0)
+			&& printf("\nMax 200 philos.\n")))
 		return (0);
 	misc->time_to_die = ft_atoi(argv[2]);
 	misc->time_to_eat = ft_atoi(argv[3]);

@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 15:08:47 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/27 16:20:39 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/28 15:28:16 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ long	set_ms_start(void);
 int	ft_atoi(const char *str);
 char	*ft_strchr(const char *s, int c);
 
-void	create_threads(int nbr_of_philo, pthread_t *philo_thread, t_philo *philo_struct);
+int	create_threads(pthread_t *philo_thread, t_philo *philo_struct);
+void	join_threads(pthread_t *philo_thread, t_philo *philo_struct);
 
 int	acquire_args(t_misc *misc, int argc, char **argv);
 int	check_args_only_nbr(int argc, char **argv);
