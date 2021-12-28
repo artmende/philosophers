@@ -6,57 +6,28 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 16:13:34 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/28 15:26:15 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/28 19:05:34 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	threads_not_finished(t_philo *philo_array)
+void	*philo_routine(void *arg)
 {
-	int	i;
+	t_philo	*philo;
 
-	i = 0;
-	while (i < philo_array->misc->nbr_of_philo)
+	philo = (t_philo *)arg;
+	while (philo->misc->start == 0)
+		usleep(50);
+	if (philo->philo % 2)
 	{
-		if (philo_array[i].finished == 0)
-			return (1);
-		i++;
+		if (philo->misc->time_to_eat > 5)
+			ft_sleep_ms(philo->misc->time_to_eat * 2 / 3);
+		else
+			ft_sleep_ms(5);
 	}
-	return (0);
-}
-
-int	meal_is_expired(t_philo *philo_array, int philo_id, long current_time)
-{
-	return (current_time - philo_array->misc->last_eat_ms[philo_id]
-		> philo_array->misc->time_to_die);
-}
-
-void	*life_check(t_philo *philo_array)
-{
-	int		i;
-	long	current_time;
-
-	while (threads_not_finished(philo_array))
-	{
-		i = 0;
-		current_time = get_timestamp(philo_array->misc->ms_at_start);
-		while (i < philo_array->misc->nbr_of_philo)
-		{
-			if(meal_is_expired(philo_array, i, current_time))
-			{
-				philo_array->misc->start = 0;
-				pthread_mutex_lock(&philo_array->misc->speak);
-				printf("%ld %d died\n", current_time, i);
-				ft_sleep_ms(500);
-				pthread_mutex_unlock(&philo_array->misc->speak);
-				return (0);
-			}
-			i++;
-		}
-	}
-	philo_array->misc->start = 0;
-	return (0);
+	philo_loop_in_action(philo, 0, 0);
+	return (NULL);
 }
 
 void	philo_loop_in_action(t_philo *philo, int times_eaten, long timestamp)
@@ -78,33 +49,6 @@ void	philo_loop_in_action(t_philo *philo, int times_eaten, long timestamp)
 		if (philo->misc->start)
 			printf("%ld %d is thinking\n", timestamp, philo->philo);
 		pthread_mutex_unlock(&philo->misc->speak);
-	}
-}
-
-void	*philo_routine(void *arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	while (philo->misc->start == 0)
-		usleep(50);
-	if (philo->philo % 2)
-		ft_sleep_ms(philo->misc->time_to_eat * 2 / 3);
-	philo_loop_in_action(philo, 0, 0);
-	return (NULL);
-}
-
-void	set_forks(int *fork_a, int *fork_b, t_philo *philo)
-{
-	if (philo->philo == philo->misc->nbr_of_philo - 1)
-	{
-		*fork_a = philo->philo;
-		*fork_b = 0;
-	}
-	else
-	{
-		*fork_a = philo->philo;
-		*fork_b = *fork_a + 1;
 	}
 }
 
@@ -134,4 +78,18 @@ void	philo_eat(t_philo *philo)
 	ft_sleep_ms(philo->misc->time_to_eat);
 	pthread_mutex_unlock(&philo->fork[fork_a]);
 	pthread_mutex_unlock(&philo->fork[fork_b]);
+}
+
+void	set_forks(int *fork_a, int *fork_b, t_philo *philo)
+{
+	if (philo->philo == philo->misc->nbr_of_philo - 1)
+	{
+		*fork_a = philo->philo;
+		*fork_b = 0;
+	}
+	else
+	{
+		*fork_a = philo->philo;
+		*fork_b = *fork_a + 1;
+	}
 }

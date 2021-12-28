@@ -6,15 +6,22 @@
 #    By: artmende <artmende@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/27 16:20:49 by artmende          #+#    #+#              #
-#    Updated: 2021/12/27 16:21:14 by artmende         ###   ########.fr        #
+#    Updated: 2021/12/28 18:16:48 by artmende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -pthreads
+CFLAGS = -Wall -Wextra -Werror -pthread
 
-SRCS =  ./push_swap_folder/main.c \
+SRCS =	./main.c \
+		./acquire_args.c \
+		./init_create_join.c \
+		./life_check.c \
+		./thread_routines.c \
+		./time_fct.c \
+		./from_libft/ft_atoi.c \
+		./from_libft/ft_strchr.c \
 
 OBJS = $(SRCS:.c=.o)
 
@@ -25,13 +32,13 @@ NAME = philo
 all: $(NAME)
 
 $(NAME): $(OBJS)
-        $(CC) -o $(NAME) $(CFLAGS) $(OBJS)
+	$(CC) -o $(NAME) $(CFLAGS) $(OBJS)
 
 clean:
-        $(RM) $(OBJS)
+	$(RM) $(OBJS)
 
 fclean: clean
-        $(RM) $(NAME)
+	$(RM) $(NAME)
 
 re: fclean all
 
