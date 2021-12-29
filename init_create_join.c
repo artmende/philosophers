@@ -6,7 +6,7 @@
 /*   By: artmende <artmende@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:20:34 by artmende          #+#    #+#             */
-/*   Updated: 2021/12/28 19:10:51 by artmende         ###   ########.fr       */
+/*   Updated: 2021/12/29 14:42:53 by artmende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	join_threads(pthread_t *philo_thread, t_philo *philo_struct)
 	i = 0;
 	while (philo_thread && i < philo_struct->misc->nbr_of_philo)
 	{
-//		pthread_join(philo_thread[i], NULL);
+		pthread_join(philo_thread[i], NULL);
 		i++;
 	}
 	usleep(5000);
